@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLSchema, GraphQLList, GraphQLInt } from "graphql";
-import { CardType, ColumnType } from "/Users/Nikolaj/projects/graphql-apollo-server-workshop/types.js";
+import { CardInputType, CardType, ColumnInputType, ColumnType } from "/Users/Nikolaj/projects/graphql-apollo-server-workshop/types.js";
 import { card_list, column_list } from "/Users/Nikolaj/projects/graphql-apollo-server-workshop/data.js";
 
 export const schema = new GraphQLSchema({
@@ -25,7 +25,7 @@ export const schema = new GraphQLSchema({
                             type: new GraphQLNonNull(GraphQLInt),
                         }
                     },
-                    resolve: (root,args,context,info) => {
+                    resolve: (root, args) => {
                         return { "column": column_list.find(column => column.id === args.id) }
                     }
                 },
@@ -36,10 +36,43 @@ export const schema = new GraphQLSchema({
                             type: new GraphQLNonNull(GraphQLInt),
                         }
                     },
-                    resolve: (root,args,context,info) => {
+                    resolve: (root, args) => {
                         return { "card": card_list.find(card => card.id === args.id) }
                     }
                 }
             },
+        }),
+        mutation: new GraphQLObjectType({
+            name: "Mutation",
+            fields: {
+                create_column: {
+                    type: new GraphQLList(ColumnType),
+                    args: {
+                        input: {
+                            type: ColumnInputType,
+                        },
+                    },
+                    resolve: (root, args) => {
+                        card_list.push(args.input);
+                        return card_list;
+                    }
+                },
+                update_card: {
+                    type: CardType,
+                    args: {
+                        id: {
+                            type: new GraphQLNonNull(GraphQLInt),
+                        },
+                        input: {
+                            type: CardInputType,
+                        },
+                    },
+                    resolve: (root, args) => {
+                        let idx = card_list.findIndex(card => card.id === args.id);
+                        card_list[idx] = args.input;
+                        return card_list[idx];
+                    }
+                }
+            }
         })
 });
