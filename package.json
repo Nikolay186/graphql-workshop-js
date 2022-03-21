@@ -1,0 +1,14 @@
+{
+  "name": "graphql-apollo-server-workshop",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.6.4",
+    "graphql": "^16.3.0"
+  }
+}
